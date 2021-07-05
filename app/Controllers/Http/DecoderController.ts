@@ -6,27 +6,31 @@ import got from 'got'
 
 export default class DecodesController {
   public async index({ request, response }: HttpContextContract) {
-    const { fileurl } = await request.validate(DecoderValidator)
+    try {
+      const { fileurl } = await request.validate(DecoderValidator)
 
-    const imgResponse = await got(fileurl, { responseType: 'buffer' })
+      const imgResponse = await got(fileurl, { responseType: 'buffer' })
 
-    const imageData = await this.getImageDataFromPng(imgResponse.body)
+      const imageData = await this.getImageDataFromPng(imgResponse.body)
 
-    const imageUint8 = new Uint8ClampedArray(
-      imageData.data,
-      imageData.data.byteOffset,
-      imageData.data.byteLength
-    )
+      const imageUint8 = new Uint8ClampedArray(
+        imageData.data,
+        imageData.data.byteOffset,
+        imageData.data.byteLength
+      )
 
-    var code = jsQR(imageUint8, imageData.width, imageData.height, {
-      inversionAttempts: 'dontInvert',
-    })
+      var code = jsQR(imageUint8, imageData.width, imageData.height, {
+        inversionAttempts: 'dontInvert',
+      })
 
-    if (code === null) {
+      if (code === null) {
+        return response.unprocessableEntity('Unable to decode QR code')
+      }
+
+      return code.data
+    } catch (error) {
       return response.unprocessableEntity('Unable to decode QR code')
     }
-
-    return code.data
   }
 
   public async getImageDataFromPng(
