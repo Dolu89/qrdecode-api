@@ -25,8 +25,8 @@
   "dependencies": {
     "@adonisjs/core": "^5.1.0",
     "@adonisjs/repl": "^3.0.0",
+    "axios": "^0.21.1",
     "file-type": "^16.5.0",
-    "got": "^11.8.2",
     "jpeg-js": "^0.4.3",
     "jsqr": "^1.4.0",
     "pngjs": "^6.0.0",

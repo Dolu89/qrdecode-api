@@ -2,7 +2,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import DecoderValidator from 'App/Validators/DecoderValidator'
 import jsQR from 'jsqr'
 import { PNG } from 'pngjs'
-import got from 'got'
+import axios from 'axios'
 import FileType from 'file-type'
 import ImageData from 'App/Models/ImageData'
 import jpeg from 'jpeg-js'
@@ -11,19 +11,19 @@ export default class DecodesController {
   public async index({ request, response }: HttpContextContract) {
     const { fileurl } = await request.validate(DecoderValidator)
 
-    const imgResponse = await got(fileurl, { responseType: 'buffer' })
+    const imgResponse = await axios.get(fileurl, { responseType: 'arraybuffer' })
 
-    if (imgResponse.statusCode !== 200) {
+    if (imgResponse.status !== 200) {
       return response.unprocessableEntity('Unable to decode QR code')
     }
 
-    const fileType = await FileType.fromBuffer(imgResponse.body)
+    const fileType = await FileType.fromBuffer(imgResponse.data)
 
     if (!fileType?.mime) {
       return response.unprocessableEntity('Unable to decode QR code')
     }
 
-    const imageData = await this.getImageDataFromBuffer(imgResponse.body, fileType?.mime)
+    const imageData = await this.getImageDataFromBuffer(imgResponse.data, fileType?.mime)
 
     if (!imageData?.data) {
       return response.unprocessableEntity('Unable to decode QR code')
