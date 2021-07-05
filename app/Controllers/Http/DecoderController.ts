@@ -43,7 +43,7 @@ export default class DecodesController {
       return response.unprocessableEntity('Unable to decode QR code')
     }
 
-    return code.data
+    return { data: code.data }
   }
 
   public async getImageDataFromBuffer(fileBuffer: ArrayBuffer, mime: string): Promise<ImageData> {
