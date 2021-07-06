@@ -20,4 +20,6 @@ export default Env.rules({
   APP_KEY: Env.schema.string(),
   APP_NAME: Env.schema.string(),
   NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
+  LNBITS_HOST: Env.schema.string({ format: 'url' }),
+  LNBITS_API_KEY: Env.schema.string(),
 })

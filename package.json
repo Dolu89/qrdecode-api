@@ -25,6 +25,7 @@
   "dependencies": {
     "@adonisjs/core": "^5.1.0",
     "@adonisjs/repl": "^3.0.0",
+    "@node-lightning/invoice": "^0.22.1",
     "axios": "^0.21.1",
     "file-type": "^16.5.0",
     "jpeg-js": "^0.4.3",
